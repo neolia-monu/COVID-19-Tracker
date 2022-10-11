@@ -1,14 +1,13 @@
 import React from "react";
 import { Card, CardContent, Grid, Typography } from "@material-ui/core";
 import CountUp from "react-countup";
+import cx from "classnames";
 
 import styles from "./Cards.module.css";
 import { Loading } from "../Loading/Loading";
 
-export const Cards = ({
-  data: { confirmed, recovered, deaths, lastUpdate }
-}) => {
-  console.log("Recovered: ", recovered);
+export const Cards = ({ data: { confirmed, deaths, lastUpdate } }) => {
+  // console.log("Recovered: ", recovered);
 
   if (!confirmed) {
     return <Loading />;
@@ -17,7 +16,13 @@ export const Cards = ({
   return (
     <div className={styles.container}>
       <Grid container spacing={3} justifyContent="center">
-        <Grid item component={Card}>
+        <Grid
+          item
+          component={Card}
+          xs={12}
+          md={5}
+          className={cx(styles.card, styles.infected)}
+        >
           <CardContent>
             <Typography color="textSecondary" gutterBottom>
               Infected
@@ -38,26 +43,13 @@ export const Cards = ({
             </Typography>
           </CardContent>
         </Grid>
-        <Grid item component={Card}>
-          <CardContent>
-            <Typography color="textSecondary" gutterBottom>
-              Recovered
-            </Typography>
-            <Typography variant="h5">
-              <CountUp
-                start={0}
-                end={recovered.value}
-                duration={2.5}
-                separator=","
-              />
-            </Typography>
-            <Typography color="textSecondary">REAL DATE</Typography>
-            <Typography variant="body2">
-              Number of recoveries from COVID-19
-            </Typography>
-          </CardContent>
-        </Grid>
-        <Grid item component={Card}>
+        <Grid
+          item
+          component={Card}
+          xs={12}
+          md={5}
+          className={cx(styles.card, styles.death)}
+        >
           <CardContent>
             <Typography color="textSecondary" gutterBottom>
               Deaths
@@ -70,7 +62,9 @@ export const Cards = ({
                 separator=","
               />
             </Typography>
-            <Typography color="textSecondary">REAL DATE</Typography>
+            <Typography color="textSecondary">
+              {new Date(lastUpdate).toDateString()}
+            </Typography>
             <Typography variant="body2">
               Number of deaths caused by COVID-19
             </Typography>
