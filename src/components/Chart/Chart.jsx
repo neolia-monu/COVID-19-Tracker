@@ -7,7 +7,7 @@ import styles from "./Chart.module.css";
 
 Chart.register(...registerables);
 
-export const CovidChart = () => {
+export const CovidChart = ({ data: { confirmed, deaths }, country }) => {
   const [dailyData, setDailyData] = useState([]);
 
   useEffect(() => {
@@ -17,10 +17,29 @@ export const CovidChart = () => {
       setDailyData(dailyData1);
     };
 
-    console.log(dailyData);
+    // console.log(dailyData);
 
     fetchAPI();
-  });
+  }, []);
+
+  const barChart = confirmed ? (
+    <Bar
+      data={{
+        labels: ["Infected", "Deaths"],
+        datasets: [
+          {
+            label: "People",
+            backgroundColor: ["rgba(0, 0, 255, 0.5)", "rgba(255, 0, 0, 0.5)"],
+            data: [confirmed.value, deaths.value]
+          }
+        ]
+      }}
+      options={{
+        legend: { display: false },
+        title: { display: true, text: `Current state is ${country}` }
+      }}
+    />
+  ) : null;
 
   // const lineChart = dailyData ? <h1>Charts</h1> : null;
   const lineChart = dailyData.length ? (
@@ -48,5 +67,7 @@ export const CovidChart = () => {
   // // (
   //   <Line data={{ labels: "", datasets: [{}, {}] }} />
   //   )
-  return <div className={styles.container}>{lineChart}</div>;
+  return (
+    <div className={styles.container}>{country ? barChart : lineChart}</div>
+  );
 };
